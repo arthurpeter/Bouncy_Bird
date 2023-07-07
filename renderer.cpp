@@ -209,7 +209,8 @@ void draw_spike_right(float x, float y, float half_size_x, float half_size_y, un
     for (int y = y0 ; y < y1 ; y++) {
         unsigned int* pixel = (unsigned int*)buffer_memory + x0 + y * buffer_width;
         for (int x = x0 ; x < x1 ; x++) {
-            if(y >= y0 + (x1 - x) && y < y1 - (x1 - x)) *pixel = color;
+            if(y > y0 + (x1 - x) && y < y1 - (x1 - x)) *pixel = color;
+            else if(y == y0 + (x1 - x) && y == y1 - (x1 - x)) *pixel = color;
             *pixel++;
         }
     }
