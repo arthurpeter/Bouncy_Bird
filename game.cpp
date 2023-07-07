@@ -11,7 +11,7 @@ float player_dp_x;
 float player_dp_y;
 float arena_half_size_x = 0.85, arena_half_size_y = 0.49;
 float player_half_size_x = 0.03, player_half_size_y = 0.03;
-float player_speed = 0.002;
+float player_speed = 0.5;
 float speed_increment = 1.075;
 float spike_half_size_x = 0.025, spike_half_size_y = 0.05;
 unsigned int random_number = 5;
@@ -25,12 +25,15 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
         flash();
         flash_time -= dt;
     }else {
+        // background
         clear_screen(0x9E9E9B);
+        // arena
         draw_rect(0, 0, arena_half_size_x, arena_half_size_y, 0xACEADB);
         /*for (float i = -0.8; i < 0.8 ; i += 0.08) {
             draw_spike_down(i, -0.45, 0.04, 0.02, 0x9E9E9B);
             draw_spike_up(i, 0.45, 0.04, 0.02, 0x9E9E9B);
         }*/
+        // spikes
         int spike_number = 0;
         for (float i = -0.45 ; i < 0.45 ; i += spike_half_size_y * 2) {
             if(spike_number != random_number && spike_number != random_number + 1 && spike_number != random_number2 && spike_number != random_number2 + 1) {
@@ -41,13 +44,15 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
         }
         float player_ddp_x = 0.f;
         float player_ddp_y = 0.f;
-        if(is_down(BUTTON_UP)) player_ddp_y += 20;
-        if(is_down(BUTTON_DOWN)) player_ddp_y -= 20;
+        //if(is_down(BUTTON_UP)) player_ddp_y += 20;
+        //if(is_down(BUTTON_DOWN)) player_ddp_y -= 20;
         //if(is_down(BUTTON_LEFT)) player_ddp_x -= 20;
         //if(is_down(BUTTON_RIGHT)) player_ddp_x += 20;
-        if(*direction == right) player_p_x += player_speed;
-        if(*direction == left) player_p_x -= player_speed;
+        if(*direction == right) player_p_x += player_speed * dt;
+        if(*direction == left) player_p_x -= player_speed * dt;
         if(pressed(BUTTON_JUMP)) player_ddp_y += 10 * 20;
+
+        // gravity
         player_ddp_y -= 2.5;
 
         player_ddp_x -= player_dp_x * 0.5;
@@ -66,6 +71,8 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                     player_p_x = 0;
                     player_p_y = 0;
                     player_score = 0;
+                    player_speed = 0.5;
+                    speed_increment = 1.075;
             } else {
                 player_p_x = arena_half_size_x - player_half_size_x;
                 player_dp_x *= -0.5;
@@ -89,6 +96,8 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                     player_p_x = 0;
                     player_p_y = 0;
                     player_score = 0;
+                    player_speed = 0.5;
+                    speed_increment = 1.075;
             } else {
                 player_p_x = -arena_half_size_x + player_half_size_x;
                 player_dp_x *= -0.5;
