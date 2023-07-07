@@ -1,4 +1,5 @@
 #include <windows.h>
+
 //#include <random>
 bool running = true;
 int buffer_width;
@@ -45,6 +46,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+    ShowCursor(false);
     WNDCLASS window_class = {};
     window_class.style = CS_HREDRAW | CS_VREDRAW;
     window_class.lpszClassName = "Bouncy Bird";
@@ -53,6 +55,14 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     RegisterClass(&window_class);
 
     HWND window = CreateWindow(window_class.lpszClassName, "Bouncy Bird", WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 1080, 640, 0, 0, hInstance, 0);
+    {
+        // fullscreen
+        /*SetWindowLong(window, GWL_STYLE, GetWindowLong(window, GWL_STYLE) & ~WS_OVERLAPPEDWINDOW);
+		MONITORINFO mi = { sizeof(mi) };
+		GetMonitorInfo(MonitorFromWindow(window, MONITOR_DEFAULTTOPRIMARY), &mi);
+		SetWindowPos(window, HWND_TOP, mi.rcMonitor.left, mi.rcMonitor.top, mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top, SWP_NOOWNERZORDER | SWP_FRAMECHANGED);*/
+        
+    }
     HDC hdc = GetDC(window);
 
     Input input = {};
@@ -85,8 +95,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
 #define process_button(b, vk)\
 case vk: {\
-if(vk == VK_LEFT || vk == 0x41) direction = left;\
-if(vk == VK_RIGHT || vk == 0x44) direction = right;\
 input.buttons[b].changed = is_down != input.buttons[b].is_down;\
 input.buttons[b].is_down = is_down;\
 }break;
@@ -102,6 +110,7 @@ input.buttons[b].is_down = is_down;\
                         process_button(BUTTON_RIGHT, 0x44);
                         process_button(BUTTON_JUMP, VK_SPACE);
                         process_button(BUTTON_JUMP, VK_LBUTTON);
+                        process_button(BUTTON_ENTER, VK_RETURN);
                     }
                 }break;
                 default: {
