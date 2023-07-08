@@ -60,8 +60,8 @@ void draw_rect(float x, float y, float half_size_x, float half_size_y, unsigned 
     draw_rect_in_pixels(x0, y0, x1, y1, color);
 }
 
-void draw_character_right(float x, float y, float half_size_x, float half_size_y) {
-    draw_rect(x, y, half_size_x, half_size_y, 0xF8F402);
+void draw_character_right(float x, float y, float half_size_x, float half_size_y, unsigned int color) {
+    draw_rect(x, y, half_size_x, half_size_y, color);
     draw_rect(x, y + 0.031, half_size_x * 1.1, half_size_y * 0.07, 0x000000);
     draw_rect(x, y - 0.031, half_size_x * 1.1, half_size_y * 0.07, 0x000000);
     draw_rect(x + 0.031, y, half_size_x * 0.07, half_size_y * 1.1, 0x000000);
@@ -81,8 +81,8 @@ void draw_character_right(float x, float y, float half_size_x, float half_size_y
     draw_rect(x - 0.03, y + 0.005, half_size_x * 0.5, half_size_y * 0.4, 0xFFFDBE);
 }
 
-void draw_character_left(float x, float y, float half_size_x, float half_size_y) {
-    draw_rect(x, y, half_size_x, half_size_y, 0xF8F402);
+void draw_character_left(float x, float y, float half_size_x, float half_size_y, unsigned int color) {
+    draw_rect(x, y, half_size_x, half_size_y, color);
     draw_rect(x, y + 0.031, half_size_x * 1.1, half_size_y * 0.07, 0x000000);
     draw_rect(x, y - 0.031, half_size_x * 1.1, half_size_y * 0.07, 0x000000);
     draw_rect(x - 0.031, y, half_size_x * 0.07, half_size_y * 1.1, 0x000000);
@@ -508,14 +508,26 @@ const char* letters[][7] = {
     "0",
     "0000",
 
+    " 00",
+    " 00",
+    "",
+    "",
+    "",
+    " 00",
+    " 00",
+
 };
+
 void draw_text(const char *text, float x, float y, float size, unsigned int color){
     float half_size = size * 0.5;
     float original_y = y;
 
     while(*text) {
         if(*text != ' ') {
-            const char** a_letter = letters[*text - 'A'];
+
+            const char** a_letter;
+            if(*text == 58) a_letter = letters[26];
+            else a_letter = letters[*text - 'A'];
             float original_x = x;
             for(int i = 0; i < 7 ; i++) {
                 const char* row = a_letter[i];
