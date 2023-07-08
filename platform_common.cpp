@@ -9,6 +9,8 @@ enum {
     BUTTON_LEFT,
     BUTTON_RIGHT,
     BUTTON_JUMP,
+    BUTTON_JUMP2,
+    BUTTON_ENTER,
 
     BUTTON_COUNT,
 };
