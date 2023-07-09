@@ -1,6 +1,7 @@
 #include <cstdlib> 
 #include <ctime>
 #include <stdio.h>
+#include "MMSystem.h"
 
 #define is_down(b) input->buttons[b].is_down
 #define pressed(b) (input->buttons[b].is_down && input->buttons[b].changed)
@@ -50,6 +51,8 @@ enum GameState {
 
 GameState current_gamestate;
 
+bool music_started = false;
+
 void simulate_game(Input * input, float dt, unsigned int *direction) {
     if (flash_time > 0) {
         flash();
@@ -80,7 +83,10 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                 
                 if(*direction == right) player_p_x += player_speed * dt;
                 if(*direction == left) player_p_x -= player_speed * dt;
-                if(pressed(BUTTON_JUMP)) player_dp_y += 1.5;
+                if(pressed(BUTTON_JUMP)) {
+                    player_dp_y += 1.5;
+                    PlaySound(TEXT("toy-button-105724.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                }
 
                 // gravity
                 player_ddp_y -= 2.5;
@@ -179,8 +185,14 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                     player_p_x -= player_speed * dt;
                     player2_p_x += player_speed * dt;
                 }
-                if(pressed(BUTTON_JUMP)) player_dp_y += 1.5;
-                if(pressed(BUTTON_JUMP2)) player2_dp_y += 1.5;
+                if(pressed(BUTTON_JUMP)) {
+                    player_dp_y += 1.5;
+                    PlaySound(TEXT("toy-button-105724.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                }
+                if(pressed(BUTTON_JUMP2)) {
+                    player2_dp_y += 1.5;
+                    PlaySound(TEXT("toy-button-105724.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                }
 
                 // gravity
                 player_ddp_y -= 2.5;
@@ -302,7 +314,10 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
             }
 
         }else if (current_gamemode == GM_MENU) {
-            
+            if(!music_started) {
+                PlaySound(TEXT("puzzle.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+                music_started = true;
+            }
 
             if(pressed(BUTTON_LEFT) || pressed(BUTTON_RIGHT)) {
                 hot_button_menu = !hot_button_menu;
@@ -320,8 +335,14 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
             draw_text("BOUNCY BIRD", -0.53, 0.3, 0.017, 0xFF6800);
             if(pressed(BUTTON_ENTER)) {
                 current_gamemode = GM_GAMEPLAY;
+                music_started = false;
+                PlaySound(TEXT("toy-button-105724.wav"), NULL, SND_FILENAME | SND_ASYNC);
             }
         } else if(current_gamemode = GM_GAME_OVER) {
+            if(music_started == false) {
+                PlaySound(TEXT("puzzle.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+                music_started = true;
+            }
 
             if(pressed(BUTTON_LEFT) || pressed(BUTTON_RIGHT)) {
                 hot_button_game_over = !hot_button_game_over;
@@ -354,10 +375,13 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
 
             player_score = 0;
             if(pressed(BUTTON_ENTER)) {
-                if(hot_button_game_over == 0)
+                if(hot_button_game_over == 0) {
                     current_gamemode = GM_GAMEPLAY;
-                else
+                    music_started = false;
+                    PlaySound(TEXT("toy-button-105724.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                } else {
                     current_gamemode = GM_MENU;
+                }
             }
         }
 
