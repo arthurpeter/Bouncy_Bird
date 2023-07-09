@@ -24,7 +24,7 @@ float player2_dp_y;
 float arena_half_size_x = 0.85, arena_half_size_y = 0.49;
 float player_half_size_x = 0.03, player_half_size_y = 0.03;
 float player_speed = 0.5;
-float speed_increment = 1.075;
+float speed_increment = 1.05;
 float spike_half_size_x = 0.025, spike_half_size_y = 0.05;
 unsigned int random_number = 5;
 unsigned int random_number2 = 7;
@@ -99,7 +99,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                             player_p_y = 0;
                             player_score_fin = player_score;
                             player_speed = 0.5;
-                            speed_increment = 1.075;
+                            speed_increment = 1.05;
                             current_gamemode = GM_GAME_OVER;
                     } else {
                         player_p_x = arena_half_size_x - player_half_size_x;
@@ -107,7 +107,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                         *direction = left;
                         if(speed_increment > 1){
                             player_speed *= speed_increment;
-                            speed_increment *= 0.997;
+                            speed_increment *= 0.999;
                         }
                         player_score++;
                     }
@@ -122,7 +122,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                             player_p_y = 0;
                             player_score_fin = player_score;
                             player_speed = 0.5;
-                            speed_increment = 1.075;
+                            speed_increment = 1.05;
                             current_gamemode = GM_GAME_OVER;
                     } else {
                         player_p_x = -arena_half_size_x + player_half_size_x;
@@ -130,7 +130,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                         *direction = right;
                         if(speed_increment > 1){
                             player_speed *= speed_increment;
-                            speed_increment *= 0.997;
+                            speed_increment *= 0.999;
                         }
                         player_score++;
                     }
@@ -216,7 +216,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                             player2_p_y = 0;
                             //player_score = 0;
                             player_speed = 0.5;
-                            speed_increment = 1.075;
+                            speed_increment = 1.05;
                             current_gamemode = GM_GAME_OVER;
 
                     } else {
@@ -227,7 +227,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                         *direction = left;
                         if(speed_increment > 1){
                             player_speed *= speed_increment;
-                            speed_increment *= 0.997;
+                            speed_increment *= 0.999;
                         }
                         player_score++;
                     }
@@ -252,7 +252,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                             player2_p_y = 0;
                             //player_score = 0;
                             player_speed = 0.5;
-                            speed_increment = 1.075;
+                            speed_increment = 1.05;
                             current_gamemode = GM_GAME_OVER;
 
                     } else {
@@ -263,7 +263,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                         *direction = right;
                         if(speed_increment > 1){
                             player_speed *= speed_increment;
-                            speed_increment *= 0.997;
+                            speed_increment *= 0.999;
                         }
                         player_score++;
                     }
@@ -336,19 +336,19 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
             }
             draw_text("GAME OVER", -0.53, 0.3, 0.02, 0x000000);
             if(!multiplayer) {
-                draw_text("SCORE:", -0.5, 0.05, 0.02, 0x000000);
-                draw_number(player_score_fin, 0.35, -0.008, 0.028, 0x000000);
+                draw_text("SCORE:", -0.5, 0.05, 0.02, 0xFF000C);
+                draw_number(player_score_fin, 0.35, -0.008, 0.028, 0xFF000C);
             } else {
                 if(current_gamestate == TIE) {
-                    draw_text("TIE", -0.15, 0.05, 0.02, 0x000000);
+                    draw_text("TIE", -0.15, 0.05, 0.02, 0xFF000C);
                 } else {
-                    draw_text("PLAYER", -0.65, 0.05, 0.02, 0x000000);
+                    draw_text("PLAYER", -0.65, 0.05, 0.02, 0xFF000C);
                     if(current_gamestate == PLAYER1_WON) {
-                        draw_number(1, 0.15, -0.008, 0.028, 0x000000);
+                        draw_number(1, 0.15, -0.008, 0.028, 0xFF000C);
                     } else {
-                        draw_number(2, 0.15, -0.008, 0.028, 0x000000);
+                        draw_number(2, 0.15, -0.008, 0.028, 0xFF000C);
                     }
-                    draw_text("WON", 0.3, 0.05, 0.02, 0x000000);
+                    draw_text("WON", 0.3, 0.05, 0.02, 0xFF000C);
                 }
             }
 
