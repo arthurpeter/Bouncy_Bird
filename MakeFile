@@ -1,7 +1,7 @@
 .PHONY: build run
 
 CC = g++
-CFLAGS = -Wall -lgdi32
+CFLAGS = -Wall -lgdi32 -lwinmm
 
 build: main
 
