@@ -50,10 +50,6 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
-    PlaySound(TEXT("puzzle.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
-
-    
-    //system("pause");
     ShowCursor(false);
     WNDCLASS window_class = {};
     window_class.style = CS_HREDRAW | CS_VREDRAW;
