@@ -52,8 +52,13 @@ enum GameState {
 GameState current_gamestate;
 
 bool music_started = false;
+bool new_highscore = false;
 
 void simulate_game(Input * input, float dt, unsigned int *direction) {
+    FILE* highscore_file = fopen("high_score.txt", "rt");
+    int highscore;
+    fscanf(highscore_file, "%d", &highscore);
+
     if (flash_time > 0) {
         flash();
         flash_time -= dt;
@@ -332,7 +337,11 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
                 draw_text("MULTIPLAYER", 0.15, -0.2, 0.008, 0xff0000);
                 multiplayer = true;
             }
+
             draw_text("BOUNCY BIRD", -0.53, 0.3, 0.017, 0xFF6800);
+            draw_text("HIGHSCORE:", -0.4, 0.045, 0.01, 0x00FF0C);
+            draw_number(highscore, 0.34, 0.015, 0.015, 0x00FF0C);
+
             if(pressed(BUTTON_ENTER)) {
                 current_gamemode = GM_GAMEPLAY;
                 music_started = false;
@@ -357,8 +366,20 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
             }
             draw_text("GAME OVER", -0.53, 0.3, 0.02, 0x000000);
             if(!multiplayer) {
-                draw_text("SCORE:", -0.5, 0.05, 0.02, 0xFF000C);
-                draw_number(player_score_fin, 0.35, -0.008, 0.028, 0xFF000C);
+                if(highscore < player_score_fin) {
+                    highscore = player_score_fin;
+                    freopen("high_score.txt", "wt", highscore_file);
+                    fprintf(highscore_file, "%d\n", highscore);
+                    new_highscore = true;
+                } 
+                
+                if(new_highscore){
+                    draw_text("NEW HIGHSCORE:", -0.75, 0.05, 0.015, 0x00FF0C);
+                    draw_number(highscore, 0.7, 0.005, 0.022, 0x00FF0C);
+                }else {
+                    draw_text("SCORE:", -0.5, 0.05, 0.02, 0xFF000C);
+                    draw_number(player_score_fin, 0.35, -0.008, 0.028, 0xFF000C);
+                }
             } else {
                 if(current_gamestate == TIE) {
                     draw_text("TIE", -0.15, 0.05, 0.02, 0xFF000C);
@@ -375,6 +396,7 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
 
             player_score = 0;
             if(pressed(BUTTON_ENTER)) {
+                new_highscore = false;
                 if(hot_button_game_over == 0) {
                     current_gamemode = GM_GAMEPLAY;
                     music_started = false;
@@ -386,5 +408,6 @@ void simulate_game(Input * input, float dt, unsigned int *direction) {
         }
 
     }
+    fclose(highscore_file);
     
 }
