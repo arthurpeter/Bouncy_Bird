@@ -1,6 +1,7 @@
 #include <windows.h>
+#include <winuser.h>
+#include "MMSystem.h"
 
-//#include <random>
 bool running = true;
 int buffer_width;
 int buffer_heigth;
@@ -17,7 +18,10 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     LRESULT result = 0;
     switch (uMsg) {
         case WM_CLOSE:
-        case WM_DESTROY: {running = false;} break;
+        case WM_DESTROY: {
+            running = false;
+            PostQuitMessage(0);
+            } break;
 
         case WM_SIZE: {
             RECT rect;
@@ -46,6 +50,10 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+    PlaySound(TEXT("puzzle.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
+    
+    //system("pause");
     ShowCursor(false);
     WNDCLASS window_class = {};
     window_class.style = CS_HREDRAW | CS_VREDRAW;
@@ -100,17 +108,15 @@ input.buttons[b].is_down = is_down;\
 }break;
 
                     switch(vk_code) {
-                        process_button(BUTTON_UP, VK_UP);
-                        process_button(BUTTON_DOWN, VK_DOWN);
                         process_button(BUTTON_LEFT, VK_LEFT);
                         process_button(BUTTON_RIGHT, VK_RIGHT);
-                        process_button(BUTTON_UP, 0x57);
-                        process_button(BUTTON_DOWN, 0x53);
                         process_button(BUTTON_LEFT, 0x41);
                         process_button(BUTTON_RIGHT, 0x44);
                         process_button(BUTTON_JUMP, VK_SPACE);
-                        process_button(BUTTON_JUMP, VK_LBUTTON);
+                        process_button(BUTTON_JUMP, VK_UP);
+                        process_button(BUTTON_JUMP2, 0x57);
                         process_button(BUTTON_ENTER, VK_RETURN);
+
                     }
                 }break;
                 default: {
@@ -132,4 +138,5 @@ input.buttons[b].is_down = is_down;\
         frame_begin_time = frame_end_time;
 
     }
+
 }
